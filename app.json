@@ -5,7 +5,11 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.yourcompany.pgp",
+      "versionCode": 1
+    }
   },
   "name": "pgp"
 }
