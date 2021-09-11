@@ -96,8 +96,8 @@ export default SignInScreen = ({navigation}) => {
                 )}
                 
             </SignUpContainer>
-            <SignIn onPress={()=>navigation.navigate("SignUp")} >
-                <Text small center>Already have ana account?{" "} 
+            <SignIn onPress={()=>navigation.navigate("SignIn")} >
+                <Text small center>Already have an account?{" "} 
                     <Text bold color="#8022d9">Sign In</Text>
                 </Text>
             </SignIn>
@@ -115,15 +115,15 @@ const Container = styled.View`
     flex:1;
 `
 const Main = styled.View`
-    margin-top: 192px;
+    margin-top: 150px;
 `;
 
 const Auth = styled.View`
-    margin: 64px 32px 32px;    
+    margin: 40px 32px 20px;    
 `
 
 const AuthContainer = styled.View`
-    margin-bottom: 32px;
+    margin-bottom: 15px;
 `
 
 const AuthTitle = styled(Text)`
@@ -135,7 +135,7 @@ const AuthTitle = styled(Text)`
 const AuthField = styled.TextInput`
     border-bottom-color: #8e93a1;
     border-bottom-width: 0.5px;
-    height: 48px
+    height: 30px
 `
 const SignUpContainer = styled.TouchableOpacity`
     margin: 0 32px;
@@ -147,6 +147,7 @@ const SignUpContainer = styled.TouchableOpacity`
 `;
 const SignIn = styled.TouchableOpacity`
     margin-top: 16px;
+    margin-bottom: 10px;
 `
 const Loading = styled.ActivityIndicator.attrs(props => ({
     color: "#fff",

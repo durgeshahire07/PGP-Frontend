@@ -1,15 +1,93 @@
 import { StatusBar} from 'expo-status-bar'
 import React,{useState} from 'react'
 import {
-    ScrollView
+    ScrollView,
+    View,
+    TextInput
 } from 'react-native'
 import styled from 'styled-components'
 import Text from '../components/Text'
+import { Entypo,Feather } from '@expo/vector-icons'; 
+import * as Animatable from 'react-native-animatable';
+import { color } from 'react-native-reanimated'
+import { State } from 'react-native-gesture-handler'
 
 export default SignInScreen = ({navigation}) => {
-    const [email,setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [data, setData] = useState({
+        email: '',
+        password: '',
+        admin: false
+    });
+    const [secureEntry, setSecureEntry] = useState({
+        secureTextEntry: true,
+    })
+    const [EmailError,setEmailError] = useState(false);
+    const [PassError,setPassError] = useState(false);
+    const [lengthError,setLengthError] = useState(false);
+    const [FillPassErr,setFillPassErr] = useState(false);
+    const [FillEmailErr, setFillEmailErr] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isEmailActive, setEmailActive] = useState(false);
+    const [isPassActive, setPassActive] = useState(false);
+    
+    const textInput = (user) => {
+        if(user==""){
+            setFillEmailErr(true)
+        }
+        else{
+            setFillEmailErr(false)
+        }
+       
+        setEmailError(false)
+        setData({
+            ...data,
+            email: user,
+        });
+    }
+    const handlePasswordChange = (pass) => {
+        if(pass==""){
+            setFillPassErr(true)
+        }
+        else{
+            setFillPassErr(false)
+        }
+        setLengthError(false)
+        setPassError(false)
+        setData({
+            ...data,
+            password: pass
+        });
+    }
+    const updateSecureTextEntry = () => {
+        setSecureEntry({
+            ...secureEntry,
+            secureTextEntry: !secureEntry.secureTextEntry
+        });
+    }
+    const SignIn = () => {
+        
+        if(data.email == "" ){
+            setEmailError(true)
+            setFillEmailErr(true)
+        }
+         if(data.password.length<8 || data.password == ""){
+            setPassError(true)
+            if(data.password==""){
+              
+                setFillPassErr(true)
+            }
+            else{
+                setLengthError(true)
+            }
+        }
+        console.log(data);
+       
+       
+        
+        // setFillPassErr(true)
+        
+
+    }
     return(
         <ScrollView>
 
@@ -21,32 +99,133 @@ export default SignInScreen = ({navigation}) => {
 
             <Auth>
                 <AuthContainer>
-                    <AuthTitle>Email Address</AuthTitle>
-                    <AuthField 
+                <AuthTitle style={{color:  EmailError ? '#c41818' : isEmailActive ? '#0217cf' :'#8e93a1'}}>Email Address</AuthTitle>
+                    {/* <AuthField 
                     autoCapitalize="none" 
                     autoCompleteType="email" 
                     autoCorrect={false} 
                     autoFocus={true}
                     keyboardType="email-address"
-                    onChangeText={email=>setEmail(email.trim())}
-                    value={email}
-                    />
+                    onChangeText={(user) => textInput(user)}
+                   
+                    /> */}
+                    <Animatable.View
+                    animation={
+                        EmailError ?
+                        "shake"
+                        :
+                        null
+                    }
+                    
+                    style={{
+                        flexDirection: 'row',
+                        marginTop: 7,
+                        borderWidth: isEmailActive ? 1.5 : 1,
+                        borderColor: EmailError? '#c41818' : isEmailActive ? '#0217cf' : 'grey',
+                        borderRadius: 10,
+                        // borderColor: '#c41818',
+                        height: 40,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                       
+                    }}
+                    >
+                        <TextInput style={{flex:1}}
+                         placeholder="avensmith@gmail.com"
+                         autoCapitalize="none"
+                         onChangeText={(user) => textInput(user)}
+                         keyboardType="email-address"
+                         onFocus={() => setEmailActive(true)}
+                         onBlur={() => setEmailActive(false)}
+                         
+                        >
+
+                        </TextInput> 
+                        {
+                            EmailError &&
+                            <Feather style={{paddingTop:5,paddingRight:5}} name="alert-circle" size={25} color="#c41818" />
+                        }
+                       
+                    </Animatable.View>
+                   {
+                       FillEmailErr &&
+                       <Text style={{color:'#c41818'}}>Email Address can't be empty.</Text>
+                   }
                 </AuthContainer>
 
                 <AuthContainer>
-                    <AuthTitle>Password</AuthTitle>
-                    <AuthField 
+                    <AuthTitle  style={{color: PassError ? '#c41818' :  isPassActive ? '#0217cf' :'#8e93a1'}}>Password</AuthTitle>
+                    <Animatable.View
+                        animation={
+                            PassError ?
+                            "shake"
+                            :
+                            null
+                        }
+                        style={{
+                            flexDirection: 'row',
+                            marginTop: 7,
+                            borderWidth: 1,
+                            borderRadius: 10,
+                            borderWidth: isPassActive ? 1.5 : 1,
+                            borderColor: PassError ? '#c41818' : isPassActive ? '#0217cf' : 'grey',
+                            // borderColor: '#c41818',
+                            height: 40,
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                        
+                        }}
+                        >
+                        <TextInput style={{flex:1}}
+                         placeholder="********"
+                         secureTextEntry={secureEntry.secureTextEntry ? true : false}
+                         autoCapitalize="none"
+                         onChangeText={(pass) => handlePasswordChange(pass)}
+                         onFocus={() => setPassActive(true)}
+                         onBlur={() => setPassActive(false)}
+                        >
+
+                        </TextInput> 
+                        <EyeToggle
+                            onPress={updateSecureTextEntry}
+                        >
+                            {secureEntry.secureTextEntry ?
+                            <Entypo style={{paddingTop:5}} name="eye-with-line" size={24} color="#8e93a1" />
+                            :
+                            <Entypo style={{paddingTop:5}} name="eye" size={24} color="#0217cf" />
+                            }
+                           
+                        </EyeToggle>
+                        
+                    </Animatable.View>
+                    {
+                        FillPassErr &&
+                        <Text style={{color:'#c41818'}}>Password can't be empty.</Text>
+                    }
+                    {
+                        lengthError &&
+                        <Text style={{color:'#c41818'}}>Use 8 or more characters for password.</Text>
+                    }
+                    {/* <AuthField 
                     autoCapitalize="none" 
                     autoCompleteType="password" 
                     autoCorrect={false} 
                     secureTextEntry={true}
-                    onChangeText={password=>setPassword(password.trim())}
-                    value={password}
+                    onChangeText={(pass) => handlePasswordChange(pass)}
+                   
                     />
+                    <Entypo name="eye" size={24} color="#8022d9" /> */}
+                   
+                    
                 </AuthContainer>
+                <ForgetPass onPress={()=>navigation.navigate("SignUp")} >
+                    <Text bold color="#0217cf">Forgot Password ?</Text>
+                </ForgetPass>
              </Auth>   
 
-            <SignInContainer disabled={loading}>
+            
+
+            <SignInContainer disabled={loading} onPress={SignIn}>
                 {loading? (
                     <Loading />
                 ):(
@@ -57,8 +236,8 @@ export default SignInScreen = ({navigation}) => {
                 
             </SignInContainer>
             <SignUp onPress={()=>navigation.navigate("SignUp")} >
-                <Text small center>New to PGP?{" "}
-                    <Text bold color="#8022d9">Sign Up</Text>
+                <Text small center>New to PGP ?{" "}
+                    <Text bold color="#0217cf">Sign Up</Text>
                 </Text>
             </SignUp>
             <HeaderGraphic>
@@ -83,11 +262,13 @@ const Auth = styled.View`
 `
 
 const AuthContainer = styled.View`
-    margin-bottom: 32px;
+    margin-bottom: 15px;
 `
 
+
+
 const AuthTitle = styled(Text)`
-    color: #8e93a1;
+   
     font-size: 12px;
     text-transform: uppercase;
     font-weight: 300;
@@ -95,16 +276,20 @@ const AuthTitle = styled(Text)`
 const AuthField = styled.TextInput`
     border-bottom-color: #8e93a1;
     border-bottom-width: 0.5px;
-    height: 48px
+    height: 40px
 `
 const SignInContainer = styled.TouchableOpacity`
     margin: 0 32px;
     height: 48px;
     align-items: center;
     justify-content: center;
-    background-color: #8022d9;
+    background-color: #0217cf;
     border-radius: 6px
 `;
+const EyeToggle = styled.TouchableOpacity``
+const ForgetPass = styled.TouchableOpacity`
+    margin-top: 5px;
+`
 const SignUp = styled.TouchableOpacity`
     margin-top: 16px;
 `
@@ -122,7 +307,7 @@ const HeaderGraphic = styled.View`
 `;
 
 const RightCircle = styled.View`
-    background-color: #8022d9;
+    background-color: #0217cf;
     position: absolute;
     width: 400px;
     height: 400px;
