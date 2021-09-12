@@ -2,15 +2,13 @@ import { StatusBar} from 'expo-status-bar'
 import React,{useState} from 'react'
 import {
     ScrollView,
-    View,
     TextInput
 } from 'react-native'
 import styled from 'styled-components'
 import Text from '../components/Text'
 import { Entypo,Feather } from '@expo/vector-icons'; 
 import * as Animatable from 'react-native-animatable';
-import { color } from 'react-native-reanimated'
-import { State } from 'react-native-gesture-handler'
+
 
 export default SignInScreen = ({navigation}) => {
     const [data, setData] = useState({
@@ -100,15 +98,6 @@ export default SignInScreen = ({navigation}) => {
             <Auth>
                 <AuthContainer>
                 <AuthTitle style={{color:  EmailError ? '#c41818' : isEmailActive ? '#0217cf' :'#8e93a1'}}>Email Address</AuthTitle>
-                    {/* <AuthField 
-                    autoCapitalize="none" 
-                    autoCompleteType="email" 
-                    autoCorrect={false} 
-                    autoFocus={true}
-                    keyboardType="email-address"
-                    onChangeText={(user) => textInput(user)}
-                   
-                    /> */}
                     <Animatable.View
                     animation={
                         EmailError ?
@@ -116,14 +105,12 @@ export default SignInScreen = ({navigation}) => {
                         :
                         null
                     }
-                    
                     style={{
                         flexDirection: 'row',
                         marginTop: 7,
                         borderWidth: isEmailActive ? 1.5 : 1,
                         borderColor: EmailError? '#c41818' : isEmailActive ? '#0217cf' : 'grey',
                         borderRadius: 10,
-                        // borderColor: '#c41818',
                         height: 40,
                         paddingLeft: 10,
                         paddingRight: 10,
@@ -138,9 +125,7 @@ export default SignInScreen = ({navigation}) => {
                          onFocus={() => setEmailActive(true)}
                          onBlur={() => setEmailActive(false)}
                          
-                        >
-
-                        </TextInput> 
+                        />  
                         {
                             EmailError &&
                             <Feather style={{paddingTop:5,paddingRight:5}} name="alert-circle" size={25} color="#c41818" />
@@ -169,7 +154,6 @@ export default SignInScreen = ({navigation}) => {
                             borderRadius: 10,
                             borderWidth: isPassActive ? 1.5 : 1,
                             borderColor: PassError ? '#c41818' : isPassActive ? '#0217cf' : 'grey',
-                            // borderColor: '#c41818',
                             height: 40,
                             paddingLeft: 10,
                             paddingRight: 10,
@@ -193,8 +177,7 @@ export default SignInScreen = ({navigation}) => {
                             <Entypo style={{paddingTop:5}} name="eye-with-line" size={24} color="#8e93a1" />
                             :
                             <Entypo style={{paddingTop:5}} name="eye" size={24} color="#0217cf" />
-                            }
-                           
+                            } 
                         </EyeToggle>
                         
                     </Animatable.View>
@@ -206,25 +189,14 @@ export default SignInScreen = ({navigation}) => {
                         lengthError &&
                         <Text style={{color:'#c41818'}}>Use 8 or more characters for password.</Text>
                     }
-                    {/* <AuthField 
-                    autoCapitalize="none" 
-                    autoCompleteType="password" 
-                    autoCorrect={false} 
-                    secureTextEntry={true}
-                    onChangeText={(pass) => handlePasswordChange(pass)}
-                   
-                    />
-                    <Entypo name="eye" size={24} color="#8022d9" /> */}
-                   
-                    
+                     
                 </AuthContainer>
-                <ForgetPass onPress={()=>navigation.navigate("SignUp")} >
-                    <Text bold color="#0217cf">Forgot Password ?</Text>
-                </ForgetPass>
+                    <ForgetPass onPress={()=>navigation.navigate("SignUp")} >
+                        <Text bold color="#0217cf">Forgot Password ?</Text>
+                    </ForgetPass>
              </Auth>   
 
             
-
             <SignInContainer disabled={loading} onPress={SignIn}>
                 {loading? (
                     <Loading />
@@ -273,11 +245,7 @@ const AuthTitle = styled(Text)`
     text-transform: uppercase;
     font-weight: 300;
 `
-const AuthField = styled.TextInput`
-    border-bottom-color: #8e93a1;
-    border-bottom-width: 0.5px;
-    height: 40px
-`
+
 const SignInContainer = styled.TouchableOpacity`
     margin: 0 32px;
     height: 48px;
