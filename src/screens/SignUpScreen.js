@@ -2,26 +2,51 @@ import { StatusBar} from 'expo-status-bar'
 import React,{useState} from 'react'
 import {
     ScrollView,
-    View,
-    TextInput
+    TextInput,View
 } from 'react-native'
 import styled from 'styled-components'
 import Text from '../components/Text'
-import Style from '../components/Style'
+import { Entypo,Feather } from '@expo/vector-icons'; 
 import * as Animatable from 'react-native-animatable';
+import Style from '../components/Style'
 
 export default SignInScreen = ({navigation}) => {
-  
-  
-    const [loading, setLoading] = useState(false);
+    
    
-   
+    //vibrate-red highlight and error states
+    const [fnameError,setFnameError] = useState({
+        emptyMsg: false,
+        err: false
+    });
+    const [lnameError,setLnameError] = useState({
+        emptyMsg: false,
+        err: false
+    });
+    const [EmailError,setEmailError] = useState({
+        emptyMsg: false,
+        existMsg: false,
+        err: false
+    });
+    const [PassError,setPassError] = useState({
+        emptyMsg: false,
+        lengthMsg: false,
+        err: false
+    });
+    const [Pass2Error,setPass2Error] = useState({
+        matchMsg: false,
+        err: false
+    });
+    
+    //touch active state
     const [fnameActive,setFnameActive] = useState(false);
     const [lnameActive,setLnameActive] = useState(false);
     const [emailActive,setEmailActive] = useState(false);
-    const[passActive,setPassActive] = useState(false);
+    const [passActive,setPassActive] = useState(false);
     const [pass2Active,setPass2Active] = useState(false);
-
+    
+    const [loading, setLoading] = useState(false);
+    
+    
     const [secureEntry, setSecureEntry] = useState({
         secureTextEntry: true,
         confirm_secureTextEntry: true,
@@ -34,28 +59,87 @@ export default SignInScreen = ({navigation}) => {
         pass: '',
     });
     const textInputFname = (first) => {
-        setData({
-            ...data,
-            fname: first
-        })
+        if(!first){
+            setFnameError({ 
+                emptyMsg: true,
+            })
+        }else{
+            setFnameError({
+                err: false,
+                emptyMsg: false
+            })
+            setData({
+                ...data,
+                fname: first
+            })
+        }
+       
     }
     const textInputLname = (last) => {
-        setData({
-            ...data,
-            lname: last
-        })
+
+        if(!last){
+            setLnameError({
+                emptyMsg:true
+            })
+        }
+        else {
+            setLnameError({
+                err: false,
+                emptyMsg: false
+            })
+            setData({
+                ...data,
+                lname: last
+            })
+        }
+        
     }
     const textInputEmail= (email) => {
+        if(!email){
+            setEmailError({
+                emptyMsg:true
+            })
+        }
+        else {
+            setEmailError({
+                err: false,
+                emptyMsg: false,
+                existMsg: false
+            })
             setData({
                 ...data,
                 email: email
             });
+        }
+            
     }
     const textInputPass = (pass1) => {
-        setData({
-            ...data,
-            pass: pass1
-        });
+        if(!pass1){
+            setPassError({
+                emptyMsg:true
+            })
+        }
+        else {
+            if(pass1.length<8){
+                setPassError({
+                    lengthMsg: true,
+                })
+            }
+            else{
+                setPassError({
+                    err: false,
+                    emptyMsg: false,
+                    lengthMsg: false
+                })
+                setData({
+                    ...data,
+                    pass: pass1
+                });
+            }
+            
+        }
+        
+        
     }
     const updateSecureTextEntry = () => {
         setSecureEntry({
@@ -64,11 +148,23 @@ export default SignInScreen = ({navigation}) => {
         });
     }
     const textInputPass2 = (pass2) => {
+        if(data.pass!=pass2){
+            setPass2Error({
+                matchMsg: true
+            })
+        }
+        else{
+            setPass2Error({
+                matchMsg: false
+            })
+        }
+        
         setSecureEntry({
             ...secureEntry,
             confirm_password: pass2
         });
     }
+
     const updateConfirmSecureTextEntry = () => {
         setSecureEntry({
             ...secureEntry,
@@ -76,192 +172,280 @@ export default SignInScreen = ({navigation}) => {
         });
     }
 
-    function signUp() {
-        console.log(data);
+    const SignIn = () => {
+        if(!data.fname || !data.lname || !data.email || !data.pass 
+            || data.pass.length<8 || secureEntry.confirm_password!=data.pass){
+            if(!data.fname){
+                setFnameError({
+                    ...fnameError,
+                    err: true,
+                    emptyMsg: true
+                })
+            }
+            if(!data.lname){
+                setLnameError({
+                    ...lnameError,
+                    err: true,
+                    emptyMsg: true,
+                })
+            }
+            if(!data.email){
+                setEmailError({
+                    ...EmailError,
+                    err: true,
+                    emptyMsg: true,
+                })
+            }
+            if(!data.pass){
+                setPassError({
+                    ...PassError,
+                    err: true,
+                    emptyMsg: true,
+                })
+            }else{
+                if(data.pass.length<8){
+                    setPassError({
+                        ...PassError,
+                        err: true,
+                        lengthMsg: true,
+                    });
+                }
+                if(secureEntry.confirm_password!=data.pass){
+                    setPass2Error({
+                        ...Pass2Error,
+                        err: true,
+                        matchMsg: true,
+                    })
+                }
+            } 
+        }
     }
     return(
         <ScrollView>
         <Container>
             <Main>
-                <Text title semi center>Sign up to get started.</Text>
+                <Text title semi center>Sign Up to get started.</Text>
             </Main>
 
             <Auth>
-                <View style={Style.textInputContainer}>
+            <View style={Style.textInputContainer}>
                     <Text 
                         style={{
                             ...Style.textInputTitle,
-                            color:  fnameActive ? '#0217cf' :'#8e93a1'
+                            color:  fnameError.err ? '#c41818' : fnameActive ? '#0217cf' :'#8e93a1'
                         }}
                     >First Name</Text>
                     <Animatable.View
-                        // animation={
-                        //     fnameErr ?
-                        //     "shake"
-                        //     :
-                        //     null
-                        // }
+                        animation={
+                            fnameError.err ?
+                            "shake"
+                            :
+                            null
+                        }
                     >
                         <View
                         style={{
                             ...Style.textInputField,
                             borderWidth: fnameActive ? 1.5 : 1,
-                            borderColor: fnameActive ? '#0217cf' : 'grey',
+                            borderColor: fnameError.err ? '#c41818' : fnameActive ? '#0217cf' : 'grey',
                         }}>
                             <TextInput style={{flex:1}}
                                 placeholder="Durgesh"
                                 onChangeText={(user) => textInputFname(user)}
                                 onFocus={() => setFnameActive(true)}
                                 onBlur={() => setFnameActive(false)}
-                         
+                                maxLength={20}
                             />
+                             {
+                            fnameError.err &&
+                            <Feather style={{paddingTop:5,paddingRight:5}} name="alert-circle" size={25} color="#c41818" />
+                             }
                         </View>
                     </Animatable.View>
-                   
+                    {
+                       fnameError.emptyMsg &&
+                       <Text style={{color:'#c41818'}}>First Name can't be empty.</Text>
+                    }
                 </View>
-                {/* <AuthContainer>
-                    <AuthTitle>First Name</AuthTitle>
-                    <AuthField 
-                    autoCapitalize="none" 
-                    autoCompleteType="email" 
-                    autoCorrect={false} 
-                    autoFocus={true}
-                    keyboardType="email-address"
-                    onChangeText={email=>setEmail(email.trim())}
-                    value={email}
-                    />
-                </AuthContainer> */}
 
                 <View style={Style.textInputContainer}>
                     <Text 
                         style={{
                             ...Style.textInputTitle,
-                            color:  lnameActive ? '#0217cf' :'#8e93a1'
+                            color: lnameError.err ? '#c41818' : lnameActive ? '#0217cf' :'#8e93a1'
                         }}
                     >Last Name</Text>
                     <Animatable.View
-                        // animation={
-                        //     fnameErr ?
-                        //     "shake"
-                        //     :
-                        //     null
-                        // }
+                        animation={
+                            lnameError.err ?
+                            "shake"
+                            :
+                            null
+                        }
                     >
                         <View
                         style={{
                             ...Style.textInputField,
                             borderWidth: lnameActive ? 1.5 : 1,
-                            borderColor: lnameActive ? '#0217cf' : 'grey',
+                            borderColor: lnameError.err ? '#c41818' : lnameActive ? '#0217cf' : 'grey',
                         }}>
                             <TextInput style={{flex:1}}
                                 placeholder="Ahire"
                                 onChangeText={(user) => textInputLname(user)}
                                 onFocus={() => setLnameActive(true)}
                                 onBlur={() => setLnameActive(false)}
+                                maxLength={20}
                             />
+                             {
+                            lnameError.err &&
+                            <Feather style={{paddingTop:5,paddingRight:5}} name="alert-circle" size={25} color="#c41818" />
+                        }
                         </View>
                     </Animatable.View>
-                   
+                    {
+                       lnameError.emptyMsg &&
+                       <Text style={{color:'#c41818'}}>Last Name can't be empty.</Text>
+                    }
                 </View>
 
                 <View style={Style.textInputContainer}>
                     <Text 
                         style={{
                             ...Style.textInputTitle,
-                            color:  emailActive ? '#0217cf' :'#8e93a1'
+                            color:  EmailError.err ? '#c41818' : emailActive ? '#0217cf' :'#8e93a1'
                         }}
                     >Email Address</Text>
                     <Animatable.View
-                        // animation={
-                        //     fnameErr ?
-                        //     "shake"
-                        //     :
-                        //     null
-                        // }
+                        animation={
+                            EmailError.err ?
+                            "shake"
+                            :
+                            null
+                        }
                     >
                         <View
                         style={{
                             ...Style.textInputField,
                             borderWidth: emailActive ? 1.5 : 1,
-                            borderColor: emailActive ? '#0217cf' : 'grey',
+                            borderColor: EmailError.err ? '#c41818' : emailActive ? '#0217cf' : 'grey',
                         }}>
                             <TextInput style={{flex:1}}
                                 placeholder="durgesahire07@gmail.com"
                                 onChangeText={(user) => textInputEmail(user)}
                                 onFocus={() => setEmailActive(true)}
                                 onBlur={() => setEmailActive(false)}
+                                
                             />
+                             {
+                            EmailError.err &&
+                            <Feather style={{paddingTop:5,paddingRight:5}} name="alert-circle" size={25} color="#c41818" />
+                        }
                         </View>
-                    </Animatable.View>   
+                    </Animatable.View>  
+                    {
+                       EmailError.emptyMsg &&
+                       <Text style={{color:'#c41818'}}>Email Address can't be empty.</Text>
+                    }        
                 </View>
 
                 <View style={Style.textInputContainer}>
                     <Text 
                         style={{
                             ...Style.textInputTitle,
-                            color:  passActive ? '#0217cf' :'#8e93a1'
+                            color:  PassError.err ? '#c41818' : passActive ? '#0217cf' :'#8e93a1'
                         }}
                     >Your Password</Text>
                     <Animatable.View
-                        // animation={
-                        //     fnameErr ?
-                        //     "shake"
-                        //     :
-                        //     null
-                        // }
+                        animation={
+                            PassError.err ?
+                            "shake"
+                            :
+                            null
+                        }
                     >
                         <View
                         style={{
                             ...Style.textInputField,
                             borderWidth: passActive ? 1.5 : 1,
-                            borderColor: passActive ? '#0217cf' : 'grey',
+                            borderColor: PassError.err ? '#c41818' : passActive ? '#0217cf' : 'grey',
                         }}>
                             <TextInput style={{flex:1}}
                                 placeholder="********"
-                                onChangeText={(user) => textInputEmail(user)}
+                                secureTextEntry={secureEntry.secureTextEntry ? true : false}
+                                onChangeText={(user) => textInputPass(user.trim())}
                                 onFocus={() => setPassActive(true)}
                                 onBlur={() => setPassActive(false)}
                             />
+                            <EyeToggle
+                            onPress={updateSecureTextEntry}
+                            >
+                            {secureEntry.secureTextEntry ?
+                            <Entypo style={{paddingTop:8}} name="eye-with-line" size={20} color="#bbc0c9" />
+                            :
+                            <Entypo style={{paddingTop:8}} name="eye" size={20} color="#0217cf" />
+                            } 
+                            </EyeToggle>
                         </View>
-                    </Animatable.View>   
+                    </Animatable.View>
+                    {
+                       PassError.emptyMsg &&
+                       <Text style={{color:'#c41818'}}>Password can't be empty.</Text>
+                    }    
+                   {
+                        PassError.lengthMsg &&
+                        <Text style={{color:'#c41818'}}>Use 8 or more characters for password.</Text>
+                    }
                 </View>
-               
+
                 <View style={Style.textInputContainer}>
                     <Text 
                         style={{
                             ...Style.textInputTitle,
-                            color:  pass2Active ? '#0217cf' :'#8e93a1'
+                            color:  Pass2Error.err ? '#c41818' :pass2Active ? '#0217cf' :'#8e93a1'
                         }}
-                    >Confirm Password</Text>
+                    >Confirm Your Password</Text>
                     <Animatable.View
-                        // animation={
-                        //     fnameErr ?
-                        //     "shake"
-                        //     :
-                        //     null
-                        // }
+                        animation={
+                            Pass2Error.err ?
+                            "shake"
+                            :
+                            null
+                        }
                     >
                         <View
                         style={{
                             ...Style.textInputField,
                             borderWidth: pass2Active ? 1.5 : 1,
-                            borderColor: pass2Active ? '#0217cf' : 'grey',
+                            borderColor: Pass2Error.err ? '#c41818' : pass2Active ? '#0217cf' : 'grey',
                         }}>
                             <TextInput style={{flex:1}}
                                 placeholder="********"
-                                onChangeText={(user) => textInputEmail(user)}
+                                secureTextEntry={secureEntry.confirm_secureTextEntry ? true : false}
+                                onChangeText={(user) => textInputPass2(user)}
                                 onFocus={() => setPass2Active(true)}
                                 onBlur={() => setPass2Active(false)}
                             />
+                            <EyeToggle
+                            onPress={updateConfirmSecureTextEntry}
+                            >
+                            {secureEntry.confirm_secureTextEntry ?
+                            <Entypo style={{paddingTop:8}} name="eye-with-line" size={20} color="#bbc0c9" />
+                            :
+                            <Entypo style={{paddingTop:8}} name="eye" size={20} color="#0217cf" />
+                            } 
+                        </EyeToggle>
                         </View>
-                    </Animatable.View>   
+                    </Animatable.View>  
+                    {
+                       Pass2Error.matchMsg &&
+                       <Text style={{color:'#c41818'}}>Password don't match.</Text>
+                    }  
                 </View>
                
-            
-                
              </Auth>   
 
-            <SignUpContainer disabled={loading} onPress={signUp}>
+            
+            <SignInContainer disabled={loading} onPress={SignIn}>
                 {loading? (
                     <Loading />
                 ):(
@@ -270,12 +454,12 @@ export default SignInScreen = ({navigation}) => {
                     </Text>
                 )}
                 
-            </SignUpContainer>
-            <SignIn onPress={()=>navigation.navigate("SignIn")} >
-                <Text small center>Already have an account?{" "} 
-                    <Text bold color="#0217cf">Sign In</Text>
+            </SignInContainer>
+            <SignUp onPress={()=>navigation.navigate("SignIn")} >
+                <Text small center>New to PGP ?{" "}
+                    <Text bold color="#0217cf">Sign Up</Text>
                 </Text>
-            </SignIn>
+            </SignUp>
             <HeaderGraphic>
                 <RightCircle />
                 <LeftCircle />
@@ -290,11 +474,11 @@ const Container = styled.View`
     flex:1;
 `
 const Main = styled.View`
-    margin-top: 150px;
+    margin-top: 110px;
 `;
 
 const Auth = styled.View`
-    margin: 40px 32px 20px;    
+    margin: 20px 32px 15px;    
 `
 
 const AuthContainer = styled.View`
@@ -302,17 +486,13 @@ const AuthContainer = styled.View`
 `
 
 const AuthTitle = styled(Text)`
-    color: #8e93a1;
+   
     font-size: 12px;
     text-transform: uppercase;
     font-weight: 300;
 `
-const AuthField = styled.TextInput`
-    border-bottom-color: #8e93a1;
-    border-bottom-width: 0.5px;
-    height: 30px
-`
-const SignUpContainer = styled.TouchableOpacity`
+
+const SignInContainer = styled.TouchableOpacity`
     margin: 0 32px;
     height: 48px;
     align-items: center;
@@ -320,7 +500,11 @@ const SignUpContainer = styled.TouchableOpacity`
     background-color: #0217cf;
     border-radius: 6px
 `;
-const SignIn = styled.TouchableOpacity`
+const EyeToggle = styled.TouchableOpacity``
+const ForgetPass = styled.TouchableOpacity`
+    margin-top: 5px;
+`
+const SignUp = styled.TouchableOpacity`
     margin-top: 16px;
     margin-bottom: 10px;
 `
@@ -332,7 +516,7 @@ const Loading = styled.ActivityIndicator.attrs(props => ({
 const HeaderGraphic = styled.View`
     position: absolute;
     width: 100%;
-    top: -50px;
+    top: -75px;
     z-index: -100;
     
 `;
@@ -344,7 +528,7 @@ const RightCircle = styled.View`
     height: 400px;
     border-radius: 250px;
     right: -100px;
-    top: -200px;
+    top: -220px;
 `;
 const LeftCircle = styled.View`
     background-color: #23a6d5;

@@ -1,5 +1,5 @@
 import { StatusBar} from 'expo-status-bar'
-import React,{useState} from 'react'
+import React,{useState,useContext} from 'react'
 import {
     ScrollView,
     TextInput
@@ -8,9 +8,11 @@ import styled from 'styled-components'
 import Text from '../components/Text'
 import { Entypo,Feather } from '@expo/vector-icons'; 
 import * as Animatable from 'react-native-animatable';
+import { UserContext } from "../context/UserContext";
 
 
 export default SignInScreen = ({navigation}) => {
+    const [user] = useContext(UserContext);
     const [data, setData] = useState({
         email: '',
         password: '',
@@ -21,7 +23,7 @@ export default SignInScreen = ({navigation}) => {
     })
     const [EmailError,setEmailError] = useState(false);
     const [PassError,setPassError] = useState(false);
-    const [lengthError,setLengthError] = useState(false);
+   
     const [FillPassErr,setFillPassErr] = useState(false);
     const [FillEmailErr, setFillEmailErr] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -49,7 +51,7 @@ export default SignInScreen = ({navigation}) => {
         else{
             setFillPassErr(false)
         }
-        setLengthError(false)
+      
         setPassError(false)
         setData({
             ...data,
@@ -63,22 +65,31 @@ export default SignInScreen = ({navigation}) => {
         });
     }
     const SignIn = () => {
-        
-        if(data.email == "" ){
-            setEmailError(true)
-            setFillEmailErr(true)
-        }
-         if(data.password.length<8 || data.password == ""){
-            setPassError(true)
-            if(data.password==""){
-              
+        if(data.email == "" || data.password == ""){
+            if(data.email == ""){
+                setEmailError(true)
+                setFillEmailErr(true)
+            }
+             if( data.password == ""){
+                setPassError(true)
                 setFillPassErr(true)
             }
-            else{
-                setLengthError(true)
-            }
         }
-        console.log(data);
+        else {
+            
+            console.log(user);
+
+            // user.setState({
+                
+            //     isLoggedIn: true
+            // })
+           
+            
+           
+            // navigation.navigate('AppStack', { screen: 'Home' })
+        }
+        
+        // console.log(data);
        
        
         
@@ -185,10 +196,7 @@ export default SignInScreen = ({navigation}) => {
                         FillPassErr &&
                         <Text style={{color:'#c41818'}}>Password can't be empty.</Text>
                     }
-                    {
-                        lengthError &&
-                        <Text style={{color:'#c41818'}}>Use 8 or more characters for password.</Text>
-                    }
+                    
                      
                 </AuthContainer>
                     <ForgetPass onPress={()=>navigation.navigate("SignUp")} >
