@@ -68,11 +68,12 @@ export default SignInScreen = ({navigation}) => {
                 err: false,
                 emptyMsg: false
             })
-            setData({
-                ...data,
-                fname: first
-            })
+           
         }
+        setData({
+            ...data,
+            fname: first
+        })
        
     }
     const textInputLname = (last) => {
@@ -87,11 +88,12 @@ export default SignInScreen = ({navigation}) => {
                 err: false,
                 emptyMsg: false
             })
-            setData({
-                ...data,
-                lname: last
-            })
+            
         }
+        setData({
+            ...data,
+            lname: last
+        })
         
     }
     const textInputEmail= (email) => {
@@ -106,11 +108,12 @@ export default SignInScreen = ({navigation}) => {
                 emptyMsg: false,
                 existMsg: false
             })
-            setData({
-                ...data,
-                email: email
-            });
+           
         }
+        setData({
+            ...data,
+            email: email
+        });
             
     }
     const textInputPass = (pass1) => {
@@ -131,13 +134,15 @@ export default SignInScreen = ({navigation}) => {
                     emptyMsg: false,
                     lengthMsg: false
                 })
-                setData({
-                    ...data,
-                    pass: pass1
-                });
+                
             }
+           
             
         }
+        setData({
+            ...data,
+            pass: pass1
+        });
         
         
     }
@@ -176,33 +181,33 @@ export default SignInScreen = ({navigation}) => {
         if(!data.fname || !data.lname || !data.email || !data.pass 
             || data.pass.length<8 || secureEntry.confirm_password!=data.pass){
             if(!data.fname){
-                setFnameError({
-                    ...fnameError,
+                setFnameError({  
                     err: true,
                     emptyMsg: true
                 })
             }
             if(!data.lname){
                 setLnameError({
-                    ...lnameError,
                     err: true,
                     emptyMsg: true,
                 })
             }
             if(!data.email){
                 setEmailError({
-                    ...EmailError,
                     err: true,
                     emptyMsg: true,
                 })
             }
             if(!data.pass){
                 setPassError({
-                    ...PassError,
                     err: true,
                     emptyMsg: true,
+                    lengthMsg: false
                 })
-            }else{
+                
+            }
+            else{
+               
                 if(data.pass.length<8){
                     setPassError({
                         ...PassError,
@@ -218,6 +223,9 @@ export default SignInScreen = ({navigation}) => {
                     })
                 }
             } 
+        }
+        else{
+            console.log("all ok")
         }
     }
     return(
@@ -251,7 +259,7 @@ export default SignInScreen = ({navigation}) => {
                         }}>
                             <TextInput style={{flex:1}}
                                 placeholder="Durgesh"
-                                onChangeText={(user) => textInputFname(user)}
+                                onChangeText={(user) => textInputFname(user.trim())}
                                 onFocus={() => setFnameActive(true)}
                                 onBlur={() => setFnameActive(false)}
                                 maxLength={20}
