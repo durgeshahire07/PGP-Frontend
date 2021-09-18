@@ -12,18 +12,18 @@ export default HomeScreen = () => {
     console.log(user);
     return (
         <View style={styles.container}>
-           {/* <StatusBar backgroundColor='#3d0099' barStyle="light-content"/> */}
+           <StatusBar backgroundColor='#fff' barStyle="dark-content"/>
             <View style={{
                             // flexDirection: 'row',
                             backgroundColor: "#0591fc",
-                            height: 65,
+                            height: 55,
                             paddingTop: 10,
                             elevation: 10,
                             alignItems:'center'
                         }}>
                 <Text large  style={{
                             color: '#fff',
-                            paddingTop: 15,  
+                           
                         }}>Home</Text>
 
             </View>

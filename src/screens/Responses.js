@@ -14,14 +14,14 @@ export default PreviousRes = () => {
            <View style={{
                             // flexDirection: 'row',
                             backgroundColor: "#32a852",
-                            height: 65,
+                            height: 55,
                             paddingTop: 10,
                             elevation: 10,
                             alignItems:'center'
                         }}>
                 <Text large  style={{
                             color: '#fff',
-                            paddingTop: 15,  
+                          
                         }}>Responses</Text>
 
             </View>
