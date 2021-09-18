@@ -10,7 +10,7 @@ const Text = styled.Text`
     color: ${props => props.color ?? "#414950"};
     margin: ${props => props.margin ?? 0};
     padding: ${props => props.padding?? 0};
-    font-family: Nunito_400Regular;
+    font-family: Nunito_400Regular;Nunito_700Bold;
 
     ${({title,large,medium,small,tiny})=>{
         switch(true){

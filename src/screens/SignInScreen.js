@@ -9,10 +9,11 @@ import Text from '../components/Text'
 import { Entypo,Feather } from '@expo/vector-icons'; 
 import * as Animatable from 'react-native-animatable';
 import { UserContext } from "../context/UserContext";
-
+import AppStackScreen from '../stack/AppStackScreen'
 
 export default SignInScreen = ({navigation}) => {
-    const [user] = useContext(UserContext);
+    const [_,setUser] = useContext(UserContext);
+    // console.log(setUser);
     const [data, setData] = useState({
         email: '',
         password: '',
@@ -64,7 +65,8 @@ export default SignInScreen = ({navigation}) => {
             secureTextEntry: !secureEntry.secureTextEntry
         });
     }
-    const SignIn = () => {
+    const SignIn = async() => {
+        
         if(data.email == "" || data.password == ""){
             if(data.email == ""){
                 setEmailError(true)
@@ -76,27 +78,26 @@ export default SignInScreen = ({navigation}) => {
             }
         }
         else {
-            
-            console.log(user);
-
-            // user.setState({
-                
-            //     isLoggedIn: true
-            // })
            
+            // setLoading(true)
+            // try{
+                setUser({
+                    firstname:"df",
+                    lastname: "sd",
+                    email:"sdfs",
+                    uid:"sdfss",
+                    isLoggedIn: true,
+                })
+            // }catch(error){
+            //     alert(error)
+            // }finally{
+            //     setLoading(false)
+            // }
             
-           
-            // navigation.navigate('AppStack', { screen: 'Home' })
         }
-        
-        // console.log(data);
-       
-       
-        
-        // setFillPassErr(true)
-        
-
+    
     }
+
     return(
         <ScrollView>
 
@@ -185,9 +186,9 @@ export default SignInScreen = ({navigation}) => {
                             onPress={updateSecureTextEntry}
                         >
                             {secureEntry.secureTextEntry ?
-                            <Entypo style={{paddingTop:5}} name="eye-with-line" size={24} color="#8e93a1" />
+                            <Entypo style={{paddingTop:8}} name="eye-with-line" size={20} color="#bbc0c9" />
                             :
-                            <Entypo style={{paddingTop:5}} name="eye" size={24} color="#0217cf" />
+                            <Entypo style={{paddingTop:8}} name="eye" size={20} color="#0217cf" />
                             } 
                         </EyeToggle>
                         

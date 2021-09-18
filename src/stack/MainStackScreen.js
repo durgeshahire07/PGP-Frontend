@@ -1,17 +1,18 @@
 import React from 'react'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { Ionicons } from '@expo/vector-icons'; 
+
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import Responses from '../screens/Responses';
 import SurveyScreen from '../screens/SurveyScreen';
-
+import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 export default MainStackScreen = () => {
     const Tab = createMaterialBottomTabNavigator(); 
     
     return (
         <Tab.Navigator
-        initialRouteName="Feed"
+        initialRouteName="Home"
         activeColor="#fff"
         shifting={true}
         // barStyle={{ backgroundColor: 'blue' }}
@@ -20,10 +21,11 @@ export default MainStackScreen = () => {
           name="Home"
           component={HomeScreen}
           options={{
+            
             tabBarLabel: 'Home',
             tabBarColor: '#0591fc',
             tabBarIcon: ({ color }) => (
-              <Ionicons name="home" color={color} size={24} />
+              <AntDesign name="home" size={24} color={color} />
             ),
           }}
         />
@@ -34,7 +36,7 @@ export default MainStackScreen = () => {
             tabBarLabel: 'Responses',
             tabBarColor: '#32a852',
             tabBarIcon: ({ color }) => (
-                <Ionicons name="file-tray-full-outline" color={color} size={26} />
+              <AntDesign name="profile" size={24} color={color} />
             ),
           }}
         />
@@ -43,9 +45,9 @@ export default MainStackScreen = () => {
           component={ProfileScreen}
           options={{
             tabBarLabel: 'Profile',
-            tabBarColor: '#9000ad',
+            tabBarColor: '#7c5de3',
             tabBarIcon: ({ color }) => (
-                <Ionicons name="person-circle-outline" color={color} size={25} />
+               <FontAwesome5 name="user-alt" size={22} color={color} />
             ),
           }}
         />
