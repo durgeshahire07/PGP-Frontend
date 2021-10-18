@@ -1,6 +1,6 @@
 import React from 'react'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import Responses from '../screens/Responses';
@@ -9,17 +9,25 @@ import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 export default MainStackScreen = () => {
     const Tab = createMaterialBottomTabNavigator(); 
-    
     return (
         <Tab.Navigator
-        initialRouteName="Home"
+        // tabBarPosition="bottom"
+        // initialRouteName="Home"
+        // initialRouteName="Feed"
+        // screenOptions={{
+        //   tabBarActiveTintColor: 'orange',
+        //   tabBarInactiveTintColor: 'grey',
+        //   tabBarLabelStyle: { fontSize: 12 },
+        //   tabBarStyle: { backgroundColor: '#0591fc' },
+        // }}
         activeColor="#fff"
         shifting={true}
-        // barStyle={{ backgroundColor: 'blue' }}
+        barStyle={{ backgroundColor: 'blue' }}
       >
         <Tab.Screen
           name="Home"
           component={HomeScreen}
+          
           options={{
             
             tabBarLabel: 'Home',

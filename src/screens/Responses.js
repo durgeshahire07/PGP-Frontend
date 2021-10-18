@@ -13,14 +13,14 @@ export default PreviousRes = () => {
         <View style={styles.container}>
            <View style={{
                             // flexDirection: 'row',
-                            backgroundColor: "#32a852",
+                            backgroundColor: "#fff",
                             height: 55,
                             paddingTop: 10,
                             elevation: 10,
                             alignItems:'center'
                         }}>
                 <Text large  style={{
-                            color: '#fff',
+                            color: 'black',
                           
                         }}>Responses</Text>
 

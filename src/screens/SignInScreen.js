@@ -10,8 +10,13 @@ import { Entypo,Feather } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 import { UserContext } from "../context/UserContext";
 import AppStackScreen from '../stack/AppStackScreen'
+import config from '../api/config'
+import axios from 'axios'
 
 export default SignInScreen = ({navigation}) => {
+
+    const {HOST,LOGIN} = config;
+   
     const [_,setUser] = useContext(UserContext);
     // console.log(setUser);
     const [data, setData] = useState({
@@ -78,16 +83,99 @@ export default SignInScreen = ({navigation}) => {
             }
         }
         else {
+            setLoading(true);
+            console.log("data: ",data)
+            setUser({
+                // firstname: response.data.data.firstName,
+                // lastname: response.data.data.lastName,
+                // email: response.data.data.userEmailId,
+                // uid: response.data.data._id,
+                isLoggedIn: true,
+            })
+            // try {
+            //     var config = {
+            //         method: 'post',
+            //         url: `${HOST}${LOGIN}`,
+            //         headers: {},
+            //         data: {
+            //             "userEmailId": data.email,
+            //             "password": data.password,
+            //             "admin": false
+            //         }
+            //     };
+            //     const response = await axios(config)
+              
+                
+            //     if (response.data.success) {
+            //         setLoading(false)
+                    
+            //             setUser({
+            //                 firstname: response.data.data.firstName,
+            //                 lastname: response.data.data.lastName,
+            //                 email: response.data.data.userEmailId,
+            //                 uid: response.data.data._id,
+            //                 isLoggedIn: true,
+            //             })
+                        // await AsyncStorage.setItem('userProfile', JSON.stringify({
+                        //     firstName: response.data.data.firstName,
+                        //         emailID: response.data.data.userEmailId,
+                        //          lastName: response.data.data.lastName,
+                        //        userID: response.data.data._id,
+                        //        token: '1'
+                        //    }));
+                        //    setSecureEntry({
+                        //        ...secureEntry,
+                        //        isLoading: false
+                        //    })
+                        //    navigation.navigate('App', { screen: 'Home' })
+                    
+                }
+                // else {
+                //     setSecureEntry({
+                //         ...secureEntry,
+                //         isLoading: false
+                //     })
+                //     ToastAndroid.show("Incorrect email id or password!",
+                //         ToastAndroid.SHORT)
+                // }
+            // } catch (error) {
+                // setSecureEntry({
+                //     ...secureEntry,
+                //     isLoading: false
+                // })
+                // console.log(error)
+                // if (error.response.status === 404) {
+                //     ToastAndroid.show("User not found!",
+                //         ToastAndroid.SHORT)
+                // } else if (error.response.status === 500) {
+                //     ToastAndroid.show("Oops...something went wrong!",
+                //         ToastAndroid.SHORT)
+                // } else if (error.response.status === 400) {
+                //     ToastAndroid.show("Enter a valid email!",
+                //         ToastAndroid.SHORT)
+                // }
+                // else if (error.response.status === 503) {
+                //     ToastAndroid.show("Internal server error! Please try after sometime.",
+                //         ToastAndroid.SHORT)
+                // }
+                
+                // else {
+                //     ToastAndroid.show(error,
+                //         ToastAndroid.SHORT)
+                // }
+            // }
+        // }
+       
            
             // setLoading(true)
             // try{
-                setUser({
-                    firstname:"df",
-                    lastname: "sd",
-                    email:"sdfs",
-                    uid:"sdfss",
-                    isLoggedIn: true,
-                })
+                // setUser({
+                //     firstname:"df",
+                //     lastname: "sd",
+                //     email:"sdfs",
+                //     uid:"sdfss",
+                //     isLoggedIn: true,
+                // })
             // }catch(error){
             //     alert(error)
             // }finally{
@@ -96,7 +184,7 @@ export default SignInScreen = ({navigation}) => {
             
         }
     
-    }
+    
 
     return(
         <ScrollView>

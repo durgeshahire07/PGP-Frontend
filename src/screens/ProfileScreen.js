@@ -11,14 +11,14 @@ export default ProfileScreen = () => {
         <View style={styles.container}>
               <View style={{
                             // flexDirection: 'row',
-                            backgroundColor: "#7c5de3",
+                            backgroundColor: "#fff",
                             height: 55,
                             paddingTop: 10,
                             elevation: 10,
                             alignItems:'center'
                         }}>
                 <Text large  style={{
-                            color: '#fff',
+                            color: 'black',
                             
                         }}>Profile</Text>
 

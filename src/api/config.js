@@ -1,0 +1,31 @@
+import { 
+    HOST,
+    REGISTER,
+    LOGIN,
+    GET_SURVEY,
+    SURVEY_STATUS,
+    SAVE_RESPONSE,
+    UPDATE_INFO,
+    UPDATE_EMAIL,
+    UPDATE_PASS,
+    FORGET_PASS,
+    OTP,
+    RESET_PASS,
+    ADD_INFO,
+} from '@env'
+
+export default {
+    HOST,
+    REGISTER,
+    LOGIN,
+    GET_SURVEY,
+    SURVEY_STATUS,
+    SAVE_RESPONSE,
+    UPDATE_INFO,
+    UPDATE_EMAIL,
+    UPDATE_PASS,
+    FORGET_PASS,
+    OTP,
+    RESET_PASS,
+    ADD_INFO, 
+}
