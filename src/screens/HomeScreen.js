@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useState,useEffect,useContext} from 'react';
 import {
   StatusBar,
   Image,
@@ -9,67 +9,17 @@ import {
   View,
   StyleSheet,
   SafeAreaView,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView
 } from 'react-native';
-const { width } = Dimensions.get('screen');
+const { width,height } = Dimensions.get('screen');
+import { UserContext } from "../context/UserContext";
 import { EvilIcons } from '@expo/vector-icons';
-import {
-  FlingGestureHandler,
-  Directions,
-  State,
-} from 'react-native-gesture-handler';
-
-// https://www.creative-flyers.com
-const DATA = [
-  {
-    title: 'Afro vibes',
-    location: 'Mumbai, India',
-    date: 'Nov 17th, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/07/Afro-vibes-flyer-template.jpg',
-  },
-  {
-    title: 'Jungle Party',
-    location: 'Unknown',
-    date: 'Sept 3rd, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2019/11/Jungle-Party-Flyer-Template-1.jpg',
-  },
-  {
-    title: '4th Of July',
-    location: 'New York, USA',
-    date: 'Oct 11th, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/06/4th-Of-July-Invitation.jpg',
-  },
-  {
-    title: 'Summer festival',
-    location: 'Bucharest, Romania',
-    date: 'Aug 17th, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/07/Summer-Music-Festival-Poster.jpg',
-  },
-  {
-    title: 'BBQ with friends',
-    location: 'Prague, Czech Republic',
-    date: 'Sept 11th, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/06/BBQ-Flyer-Psd-Template.jpg',
-  },
-  {
-    title: 'Festival music',
-    location: 'Berlin, Germany',
-    date: 'Apr 21th, 2021',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/06/Festival-Music-PSD-Template.jpg',
-  },
-  {
-    title: 'Beach House',
-    location: 'Liboa, Portugal',
-    date: 'Aug 12th, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/06/Summer-Beach-House-Flyer.jpg',
-  },
-];
+import axios from 'axios'
+// import Survey from '../components/Survey'
+import config from '../api/config'
 
 const OVERFLOW_HEIGHT = 70;
 const SPACING = 10;
@@ -96,131 +46,188 @@ const VISIBLE_ITEMS = 3;
 //   );
 // };
 
-export default function App() {
-  const [data, setData] = React.useState(DATA);
-  const scrollXIndex = React.useRef(new Animated.Value(0)).current;
-  const scrollXAnimated = React.useRef(new Animated.Value(0)).current;
-  const [index, setIndex] = React.useState(0);
-  const setActiveIndex = React.useCallback((activeIndex) => {
-    scrollXIndex.setValue(activeIndex);
-    setIndex(activeIndex);
-  });
+export default function HomeScreen() {
 
-  React.useEffect(() => {
-    if (index === data.length - VISIBLE_ITEMS - 1) {
-      // get new data
-      // fetch more data
-      const newData = [...data, ...data];
-      setData(newData);
+  const [user] = useContext(UserContext);
+  console.log(user.firstname)
+	
+    var today = new Date();
+    var time = today.getHours();
+   
+    const [state,setState] = useState('')
+
+    const updateInput = (val) => {
+       setState(val)
+       console.log(state)
+       
     }
-  });
-
-  React.useEffect(() => {
-    Animated.spring(scrollXAnimated, {
-      toValue: scrollXIndex,
-      useNativeDriver: true,
-    }).start();
-  });
-
-  return (
-    <FlingGestureHandler
-      key='left'
-      direction={Directions.LEFT}
-      onHandlerStateChange={(ev) => {
-        if (ev.nativeEvent.state === State.END) {
-          if (index === data.length - 1) {
-            return;
-          }
-          setActiveIndex(index + 1);
-        }
-      }}
-    >
-      <FlingGestureHandler
-        key='right'
-        direction={Directions.RIGHT}
-        onHandlerStateChange={(ev) => {
-          if (ev.nativeEvent.state === State.END) {
-            if (index === 0) {
-              return;
+    return (
+      <ScrollView>
+    <SafeAreaView>
+    
+      <View style={{}}>
+        <View style={{paddingLeft:22,paddingTop:10,paddingBottom:10}}>
+          <Text style={{fontSize:25,fontFamily:'Comfortaa_400Regular',color:'black'}}>
+            Good {
+            time>=6 && time<=11 ? 
+            <Text>Morning,</Text> 
+            : time>=12&&time<=15 ? 
+            <Text>Afternoon,</Text> 
+            : time>=16&&time<=20 ? 
+            <Text>Evening,</Text> 
+            : 
+            <Text>Night, </Text>
             }
-            setActiveIndex(index - 1);
-          }
-        }}
-      >
-        <SafeAreaView style={styles.container}>
-          <StatusBar hidden />
-          {/* <OverflowItems data={data} scrollXAnimated={scrollXAnimated} /> */}
-          <FlatList
-            data={data}
-            keyExtractor={(_, index) => String(index)}
-            horizontal
-            inverted
-            contentContainerStyle={{
-              flex: 1,
-              justifyContent: 'center',
-              padding: SPACING * 2,
-              marginTop: 50,
-            }}
-            scrollEnabled={false}
-            removeClippedSubviews={false}
-            CellRendererComponent={({
-              item,
-              index,
-              children,
-              style,
-              ...props
-            }) => {
-              const newStyle = [style, { zIndex: data.length - index }];
-              return (
-                <View style={newStyle} index={index} {...props}>
-                  {children}
-                </View>
-              );
-            }}
-            renderItem={({ item, index }) => {
-              const inputRange = [index - 1, index, index + 1];
-              const translateX = scrollXAnimated.interpolate({
-                inputRange,
-                outputRange: [50, 0, -100],
-              });
-              const scale = scrollXAnimated.interpolate({
-                inputRange,
-                outputRange: [0.8, 1, 1.3],
-              });
-              const opacity = scrollXAnimated.interpolate({
-                inputRange,
-                outputRange: [1 - 1 / VISIBLE_ITEMS, 1, 0],
-              });
+            <Text style={{fontSize:25,fontFamily:'Comfortaa_400Regular',color:'black'}}>{user.firstname}</Text>
+          </Text>
+          
+          {/* <Text style={{fontSize:25,fontFamily:'Comfortaa_400Regular'}}>Durgesh </Text> */}
+        </View>
+        <View style={{paddingLeft:25,paddingTop:10,paddingBottom:10,flexDirection:'row'}}>
+          <Text style={{paddingRight:5}}>WHAT'S NEW TODAY</Text>
+          <View style={{paddingLeft:5,backgroundColor:'#FC5656',paddingRight:5,borderRadius:10}}>
+            <Text style={{color:'white',fontFamily:'Nunito_400Regular'}}>2</Text>
+          </View>
+        </View>
+      {/* <View style={{height:height*0.33}}> */}
+      {/* <Survey items={DATA}/> */}
+      {/* <Survey /> */}
+      
+                            
+        {/* </View> */}
+        
 
-              return (
-                <Animated.View
-                  style={{
-                    position: 'absolute',
-                    left: -ITEM_WIDTH / 2,
-                    opacity,
-                    transform: [
-                      {
-                        translateX,
-                      },
-                      { scale },
-                    ],
-                  }}
-                >
-                  <Image
-                    source={{ uri: item.poster }}
-                    style={{
-                      width: ITEM_WIDTH,
-                      height: ITEM_HEIGHT,
-                      borderRadius: 14,
-                    }}
-                  />
-                </Animated.View>
-              );
-            }}
-          />
-        </SafeAreaView>
-      </FlingGestureHandler>
-    </FlingGestureHandler>
+
+
+        <View style={{paddingLeft:25,paddingRight:25,paddingBottom:10}}>
+          <View style={{backgroundColor:'#23a9f9',borderRadius:20}}>
+            <View style={{padding:20}}> 
+              <Text style={{color:'white',fontSize:15,fontFamily:'Nunito_700Bold',paddingBottom:10}}>HOW AM I FEELING TODAY ?</Text>
+              <View style={{backgroundColor:'white',height:2}}></View>
+            </View>
+            <View style={{paddingLeft:20,paddingRight:20,paddingBottom:20}}>
+              <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                <TouchableOpacity onPress={()=>updateInput('Awesome')}>
+                  <Text style={{fontSize:25,paddingRight:10,paddingLeft:10}}>😁</Text>
+                  <Text style={{color:'white',fontSize:12,paddingLeft:0}}>Awesome</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>updateInput('Great')}>
+                  <Text style={{fontSize:25,paddingRight:10,paddingLeft:8}}>😀</Text>
+                  <Text style={{color:'white',fontSize:12,paddingLeft:10}}>Great</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>updateInput('Good')}>
+                  <Text style={{fontSize:25,paddingRight:10,paddingLeft:5}}>😊</Text>
+                  <Text style={{color:'white',fontSize:12,paddingLeft:5}}>Good</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>updateInput('Low')}>
+                  <Text style={{fontSize:25,paddingRight:9,paddingLeft:1}}>😔</Text>
+                  <Text style={{color:'white',fontSize:12,paddingLeft:5}}>Low</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>updateInput('Horrible')}>
+                  <Text style={{fontSize:25,paddingRight:10,paddingLeft:5}}>😩</Text>
+                  <Text style={{color:'white',fontSize:12,paddingLeft:0}}>Horrible</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>updateInput('')}>
+                  <Text style={{fontSize:25,paddingRight:10,paddingLeft:3}}>❓</Text>
+                  <Text style={{color:'white',fontSize:12,paddingLeft:5}}>Other</Text>
+                </TouchableOpacity>  
+              </View>
+              <View style={{ 
+                        marginTop: 15,
+                        borderWidth: 2,
+                        borderColor: '#0e84d8',
+                        borderRadius: 15,
+                        backgroundColor:'white',
+                        height: 40,
+                        paddingLeft: 10,
+                        paddingRight: 10}}>
+                <TextInput
+                    style={{flex:1}}
+                   
+                    placeholder="Feel free to share your feelings !"
+                    value={state}
+                    onChangeText={(text) => updateInput(text)}
+                    // keyboardType="email-address"
+                    // onFocus={() => setEmailActive(true)}
+                    // onBlur={() => setEmailActive(false)}
+                    
+                />
+              </View>
+              <TouchableOpacity style={{paddingTop:20,flex:1,alignItems:'flex-end'}}>
+                
+                  <View style={{
+                    justifyContent:'center',alignItems:'center',
+                    backgroundColor:'#0f92f0',height:40,borderRadius:15,
+                    width:80,borderColor:'#0c75c0',borderWidth:1
+                    
+                  }}>
+                    <Text style={{color:'white',fontFamily:'Nunito_700Bold',fontSize:12}}>SUBMIT</Text>
+                  </View>
+              </TouchableOpacity>
+             
+            </View>
+          </View>
+        
+        </View>
+
+
+
+        <View style={{paddingLeft:25,paddingRight:25}}>
+          <View style={{backgroundColor:'#23a9f9',borderRadius:20}}>
+            <View style={{padding:20,paddingBottom:0}}> 
+              <Text style={{color:'white',fontSize:15,fontFamily:'Nunito_700Bold',paddingBottom:10}}>MY TODAY'S MISSION ?</Text>
+              <View style={{backgroundColor:'white',height:2}}></View>
+            </View>
+            <View style={{paddingLeft:20,paddingRight:20,paddingBottom:20}}>
+              
+              <View style={{ 
+                        marginTop: 15,
+                        borderWidth: 2,
+                        borderColor: '#0e84d8',
+                        borderRadius: 15,
+                        backgroundColor:'white',
+                        height: 100,
+                        paddingLeft: 10,
+                        paddingRight: 10}}>
+                <TextInput
+                    style={{paddingTop:10,}}
+                   
+                    placeholder="Your Today's Mission..."
+                    multiline
+                    // value={state}
+                    // onChangeText={(text) => updateInput(text)}
+                    // keyboardType="email-address"
+                    // onFocus={() => setEmailActive(true)}
+                    // onBlur={() => setEmailActive(false)}
+                    
+                />
+              </View>
+              <TouchableOpacity style={{paddingTop:20,flex:1,alignItems:'flex-end'}}>
+                
+                  <View style={{
+                    justifyContent:'center',alignItems:'center',
+                    backgroundColor:'#0f92f0',height:40,borderRadius:15,
+                    width:80,borderColor:'#0c75c0',borderWidth:1
+                    
+                  }}>
+                    <Text style={{color:'white',fontFamily:'Nunito_700Bold',fontSize:12}}>SUBMIT</Text>
+                  </View>
+              </TouchableOpacity>
+             
+            </View>
+          </View>
+        
+        </View>
+
+
+        <View style={{paddingBottom:100}}> 
+        
+        </View>
+    
+        </View>
+        
+    </SafeAreaView>
+    </ScrollView>
   );
 }
 

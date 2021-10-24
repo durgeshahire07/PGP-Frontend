@@ -12,6 +12,7 @@ import { UserContext } from "../context/UserContext";
 import AppStackScreen from '../stack/AppStackScreen'
 import config from '../api/config'
 import axios from 'axios'
+import { State } from 'react-native-gesture-handler'
 
 export default SignInScreen = ({navigation}) => {
 
@@ -85,13 +86,7 @@ export default SignInScreen = ({navigation}) => {
         else {
             setLoading(true);
             console.log("data: ",data)
-            setUser({
-                // firstname: response.data.data.firstName,
-                // lastname: response.data.data.lastName,
-                // email: response.data.data.userEmailId,
-                // uid: response.data.data._id,
-                isLoggedIn: true,
-            })
+            
             // try {
             //     var config = {
             //         method: 'post',
@@ -105,7 +100,7 @@ export default SignInScreen = ({navigation}) => {
             //     };
             //     const response = await axios(config)
               
-                
+            
             //     if (response.data.success) {
             //         setLoading(false)
                     
@@ -167,20 +162,43 @@ export default SignInScreen = ({navigation}) => {
         // }
        
            
-            // setLoading(true)
-            // try{
-                // setUser({
-                //     firstname:"df",
-                //     lastname: "sd",
-                //     email:"sdfs",
-                //     uid:"sdfss",
-                //     isLoggedIn: true,
-                // })
-            // }catch(error){
-            //     alert(error)
-            // }finally{
-            //     setLoading(false)
-            // }
+            setLoading(true)
+            try{
+                var config = {
+                            method: 'post',
+                            url: `${HOST}${LOGIN}`,
+                            headers: {},
+                            data: {
+                                "userEmailId": data.email,
+                                "password": data.password,
+                                "admin": false
+                            }
+                        };
+                        const response = await axios(config)
+                        console.log(response)
+                        if(response.data.success){
+                            setUser({
+                                firstname: response.data.data.firstName,
+                                lastname: response.data.data.lastName,
+                                email: response.data.data.userEmailId,
+                                uid: response.data.data._id,
+                                isLoggedIn: true,
+                            })
+                            console.log(setUser)
+                            
+                        }
+                        else{
+                            alert(
+                            "Login failed"
+                            )
+                        }
+                
+            }catch(error){
+                console.log(error)
+                alert(error);
+            }finally{
+                setLoading(false)
+            }
             
         }
     

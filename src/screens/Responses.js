@@ -11,7 +11,7 @@ export default PreviousRes = () => {
    
     return (
         <View style={styles.container}>
-           <View style={{
+           {/* <View style={{
                             // flexDirection: 'row',
                             backgroundColor: "#fff",
                             height: 55,
@@ -24,7 +24,7 @@ export default PreviousRes = () => {
                           
                         }}>Responses</Text>
 
-            </View>
+            </View> */}
             {/* <Text>Responses </Text> */}
         </View>
     )

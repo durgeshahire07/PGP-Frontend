@@ -1,64 +1,110 @@
-import React from 'react'
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import React, { useEffect,useRef } from 'react'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import Responses from '../screens/Responses';
 import SurveyScreen from '../screens/SurveyScreen';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import Icon, { Icons } from '../components/Icon';
+import * as Animatable from 'react-native-animatable';
+import Colors from '../constants/Colors';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import {View,StyleSheet,Text} from 'react-native'
+import { setStatusBarHidden } from 'expo-status-bar';
+
+const TabArr = [
+  { route: 'Home', label: 'Home', type: Icons.Ionicons, activeIcon: 'home', inActiveIcon: 'home-outline', component: HomeScreen },
+  { route: 'Like', label: 'Like', type: Icons.AntDesign, activeIcon: 'profile', inActiveIcon: 'profile', component: Responses},
+  { route: 'Account', label: 'Account', type: Icons.FontAwesome, activeIcon: 'user-circle', inActiveIcon: 'user-circle-o', component: ProfileScreen },
+];
+
 export default MainStackScreen = () => {
-    const Tab = createMaterialBottomTabNavigator(); 
+
+  const Tab = createBottomTabNavigator();
+  
+  const TabButton = (props) => {
+    const viewRef = useRef(null);
+
+    useEffect(()=>{
+      if(focused){
+        viewRef.current.animate({0:{scale: 1},1:{scale: 1.3}})
+      }
+      else{
+        // viewRef.current.animate({0:{scale: 1.5},1: {scale:1}})
+      }
+    },[focused])
+
+    const {item, onPress, accessibilityState} = props;
+    const focused = accessibilityState.selected;
+   
     return (
-        <Tab.Navigator
-        // tabBarPosition="bottom"
-        // initialRouteName="Home"
-        // initialRouteName="Feed"
-        // screenOptions={{
-        //   tabBarActiveTintColor: 'orange',
-        //   tabBarInactiveTintColor: 'grey',
-        //   tabBarLabelStyle: { fontSize: 12 },
-        //   tabBarStyle: { backgroundColor: '#0591fc' },
-        // }}
-        activeColor="#fff"
-        shifting={true}
-        barStyle={{ backgroundColor: 'blue' }}
+     <View style={styles.container}>
+       
+       <TouchableOpacity
+       style={styles.container}
+        onPress={onPress}
+        activeOpacity={1}
+       >
+      <Animatable.View style={{}}
+      ref={viewRef}
+      duration={200}
       >
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
+      <Icon type={item.type} name={focused ? item.activeIcon:item.inActiveIcon}  color={focused ? Colors.primary : Colors.primaryLite}/>
+      </Animatable.View>
+       
+       </TouchableOpacity>
+     
+     </View>
+    )
+  }
+    return (
+        <Tab.Navigator 
           
-          options={{
+          screenOptions={{
+            headerShown: false,
             
-            tabBarLabel: 'Home',
-            tabBarColor: '#0591fc',
-            tabBarIcon: ({ color }) => (
-              <AntDesign name="home" size={24} color={color} />
-            ),
+            tabBarStyle:{
+              
+              height: 60,
+              position: 'absolute',
+              bottom: 16,
+              right: 16,
+              left: 16,
+              borderRadius: 16,
+              // borderTopLeftRadius: 40,
+              // borderTopRightRadius: 40
+            }
           }}
-        />
-        <Tab.Screen
-          name="Responses"
-          component={Responses}
-          options={{
-            tabBarLabel: 'Responses',
-            tabBarColor: '#32a852',
-            tabBarIcon: ({ color }) => (
-              <AntDesign name="profile" size={24} color={color} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{
-            tabBarLabel: 'Profile',
-            tabBarColor: '#7c5de3',
-            tabBarIcon: ({ color }) => (
-               <FontAwesome5 name="user-alt" size={22} color={color} />
-            ),
-          }}
-        />
+        >
+       {TabArr.map((item, index)=> {
+         return(
+           <Tab.Screen name={item.route} component={item.component} key={index}
+              options={{
+                tabBarShowLabel: false,
+                // tabBarIcon: ({ color,focused }) => (
+                //   <Icon type={item.type} name={focused ? item.activeIcon : item.inActiveIcon} color={color} />
+                // ),
+                tabBarButton: (props) => <TabButton {...props} item={item}/>
+              }}
+           />
+         )
+       })}
       </Tab.Navigator>
     )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width:50,
+  },
+  btn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+    borderRadius: 16
+  }
+})
