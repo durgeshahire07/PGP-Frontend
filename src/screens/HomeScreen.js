@@ -12,14 +12,17 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Modal
 } from 'react-native';
+
 const { width,height } = Dimensions.get('screen');
 import { UserContext } from "../context/UserContext";
 import { EvilIcons } from '@expo/vector-icons';
 import axios from 'axios'
 // import Survey from '../components/Survey'
 import config from '../api/config'
+
 
 const OVERFLOW_HEIGHT = 70;
 const SPACING = 10;
@@ -62,23 +65,40 @@ export default function HomeScreen() {
        
     }
     return (
-      <ScrollView>
+      
     <SafeAreaView>
-    
+       {/* <View style={{
+                            // flexDirection: 'row',
+                            backgroundColor: "#fff",
+                            height: 55,
+                            paddingTop: 10,
+                            elevation: 10,
+                            alignItems:'center'
+                        }}>
+                <Text style={{
+                            color: 'black',
+                            fontSize: 24,
+                            fontFamily: 'Nunito_400Regular'
+                        }}>Home</Text>
+
+            </View>  */}
+           
+    <ScrollView>
+      {/* <Modal/> */}
       <View style={{}}>
         <View style={{paddingLeft:22,paddingTop:10,paddingBottom:10}}>
-          <Text style={{fontSize:25,fontFamily:'Comfortaa_400Regular',color:'black'}}>
+          <Text style={{fontSize:23,fontFamily:'Comfortaa_400Regular',color:'black'}}>
             Good {
             time>=6 && time<=11 ? 
-            <Text>Morning,</Text> 
+            <Text>Morning, </Text> 
             : time>=12&&time<=15 ? 
-            <Text>Afternoon,</Text> 
+            <Text>Afternoon, </Text> 
             : time>=16&&time<=20 ? 
-            <Text>Evening,</Text> 
+            <Text>Evening, </Text> 
             : 
             <Text>Night, </Text>
             }
-            <Text style={{fontSize:25,fontFamily:'Comfortaa_400Regular',color:'black'}}>{user.firstname}</Text>
+            <Text style={{fontSize:23,fontFamily:'Comfortaa_400Regular',color:'black'}}>{user.firstname}</Text>
           </Text>
           
           {/* <Text style={{fontSize:25,fontFamily:'Comfortaa_400Regular'}}>Durgesh </Text> */}
@@ -225,9 +245,9 @@ export default function HomeScreen() {
         </View>
     
         </View>
-        
+        </ScrollView>
     </SafeAreaView>
-    </ScrollView>
+   
   );
 }
 

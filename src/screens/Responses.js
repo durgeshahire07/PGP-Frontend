@@ -1,31 +1,37 @@
-import React,{useEffect} from 'react';
+import React, {useState} from 'react';
 import {
     View,
-   
-    StyleSheet,
-    StatusBar
+    Text,
+    ScrollView,
+    Button,
+    StyleSheet
 } from 'react-native';
-import Text from '../components/Text';
+
+// import Text from '../components/Text';
+
+const months = ["January", "February", "March", "April", 
+"May", "June", "July", "August", "September", "October", 
+"November", "December"];
+
+const weekDays = [
+    "Sun","Mon","Tue","Wed","Thu","Fri","Sat"
+];
+
+const nDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+
+
+
+
+
+
 
 export default PreviousRes = () => {
-   
+    
+
     return (
         <View style={styles.container}>
-           {/* <View style={{
-                            // flexDirection: 'row',
-                            backgroundColor: "#fff",
-                            height: 55,
-                            paddingTop: 10,
-                            elevation: 10,
-                            alignItems:'center'
-                        }}>
-                <Text large  style={{
-                            color: 'black',
-                          
-                        }}>Responses</Text>
-
-            </View> */}
-            {/* <Text>Responses </Text> */}
+            
         </View>
     )
 }
@@ -33,7 +39,7 @@ export default PreviousRes = () => {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        // justifyContent: "center",
-        // alignItems: "center",
+       
     },
+
 })

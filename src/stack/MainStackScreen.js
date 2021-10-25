@@ -10,8 +10,8 @@ import Icon, { Icons } from '../components/Icon';
 import * as Animatable from 'react-native-animatable';
 import Colors from '../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import {View,StyleSheet,Text} from 'react-native'
-import { setStatusBarHidden } from 'expo-status-bar';
+import {View,StyleSheet,Text,KeyboardAvoidingView} from 'react-native'
+
 
 const TabArr = [
   { route: 'Home', label: 'Home', type: Icons.Ionicons, activeIcon: 'home', inActiveIcon: 'home-outline', component: HomeScreen },
@@ -59,6 +59,12 @@ export default MainStackScreen = () => {
     )
   }
     return (
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{flex:1}}
+      
+      keyboardVerticalOffset='-50'
+      >
         <Tab.Navigator 
           
           screenOptions={{
@@ -91,6 +97,7 @@ export default MainStackScreen = () => {
          )
        })}
       </Tab.Navigator>
+      </KeyboardAvoidingView>
     )
 }
 
