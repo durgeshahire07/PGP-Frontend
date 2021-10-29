@@ -15,14 +15,14 @@ import {
   KeyboardAvoidingView,
   Modal
 } from 'react-native';
-
+import Icon, { Icons } from '../components/Icon';
 const { width,height } = Dimensions.get('screen');
 import { UserContext } from "../context/UserContext";
 import { EvilIcons } from '@expo/vector-icons';
 import axios from 'axios'
 // import Survey from '../components/Survey'
 import config from '../api/config'
-
+import {LinearGradient} from 'expo-linear-gradient';
 
 const OVERFLOW_HEIGHT = 70;
 const SPACING = 10;
@@ -85,27 +85,35 @@ export default function HomeScreen() {
            
     <ScrollView>
       {/* <Modal/> */}
-      <View style={{}}>
-        <View style={{paddingLeft:22,paddingTop:10,paddingBottom:10}}>
-          <Text style={{fontSize:23,fontFamily:'Comfortaa_400Regular',color:'black'}}>
+      <LinearGradient style={{}} 
+      // start={{x: 0.0, y: 0.25}} 
+      // end={{x: 1.5, y: 1.2}}
+      // locations={[0.1,1.0,1.0]}
+      colors={['#ECE9E6', '#ECE9E6', '#ECE9E6']} >
+        <View style={{flex:1,alignItems:'center',paddingTop:5}}>
+          <Text syle={{}}>---</Text>
+          </View>
+        <View style={{paddingLeft:22,paddingTop:5,paddingBottom:10}}>
+        <Text style={{fontSize:14,fontFamily:'Comfortaa_400Regular',color:'black'}}>Hi {user.firstname} {user.lastname},</Text>
+          <Text style={{fontSize:25,fontFamily:'Comfortaa_400Regular',color:'black'}}>
             Good {
             time>=6 && time<=11 ? 
-            <Text>Morning, </Text> 
+            <Text>Morning 🌅</Text> 
             : time>=12&&time<=15 ? 
-            <Text>Afternoon, </Text> 
+            <Text>Afternoon ☀️️</Text> 
             : time>=16&&time<=20 ? 
-            <Text>Evening, </Text> 
+            <Text>Evening 🌄</Text> 
             : 
-            <Text>Night, </Text>
+            <Text>Night 🌃</Text>
             }
-            <Text style={{fontSize:23,fontFamily:'Comfortaa_400Regular',color:'black'}}>{user.firstname}</Text>
+            
           </Text>
           
           {/* <Text style={{fontSize:25,fontFamily:'Comfortaa_400Regular'}}>Durgesh </Text> */}
         </View>
         <View style={{paddingLeft:25,paddingTop:10,paddingBottom:10,flexDirection:'row'}}>
-          <Text style={{paddingRight:5}}>WHAT'S NEW TODAY</Text>
-          <View style={{paddingLeft:5,backgroundColor:'#FC5656',paddingRight:5,borderRadius:10}}>
+          <Text style={{paddingRight:5,fontFamily:'Roboto',fontSize:12,fontWeight:'bold'}}>WHAT'S NEW TODAY</Text>
+          <View style={{paddingLeft:5,backgroundColor:'#FC5656',paddingRight:5,borderRadius:10,elevation:5}}>
             <Text style={{color:'white',fontFamily:'Nunito_400Regular'}}>2</Text>
           </View>
         </View>
@@ -120,7 +128,13 @@ export default function HomeScreen() {
 
 
         <View style={{paddingLeft:25,paddingRight:25,paddingBottom:10}}>
-          <View style={{backgroundColor:'#23a9f9',borderRadius:20}}>
+          <LinearGradient  
+            start={{x: 0.0, y: 0.25}} 
+            end={{x: 0.5, y: 1.2}}
+            locations={[0,0.7,1.0]}
+            colors={['#66c9ff', '#00a6ff', '#0095e6']} 
+            style={{borderRadius:20, elevation: 7}}>
+            
             <View style={{padding:20}}> 
               <Text style={{color:'white',fontSize:15,fontFamily:'Nunito_700Bold',paddingBottom:10}}>HOW AM I FEELING TODAY ?</Text>
               <View style={{backgroundColor:'white',height:2}}></View>
@@ -173,27 +187,38 @@ export default function HomeScreen() {
                     
                 />
               </View>
-              <TouchableOpacity style={{paddingTop:20,flex:1,alignItems:'flex-end'}}>
+              <View style={{paddingTop:20,flex:1,alignItems:'flex-end'}}>
                 
-                  <View style={{
+              <View style={{
                     justifyContent:'center',alignItems:'center',
-                    backgroundColor:'#0f92f0',height:40,borderRadius:15,
-                    width:80,borderColor:'#0c75c0',borderWidth:1
+                    backgroundColor:'#00a6ff',height:45,borderRadius:30,
+                    width:45,borderColor:'#0c75c0',borderWidth:1, elevation: 3
                     
                   }}>
-                    <Text style={{color:'white',fontFamily:'Nunito_700Bold',fontSize:12}}>SUBMIT</Text>
+                    <TouchableOpacity>
+                    <Text style={{color:'white',fontFamily:'Nunito_700Bold',fontSize:12}}>
+                      
+                    <Icon style={{ elevation: 10}} type={Icons.Feather} name='check'  color={'white'} size={25}/>
+                    
+                    </Text>
+                    </TouchableOpacity>
                   </View>
-              </TouchableOpacity>
+              </View>
              
             </View>
-          </View>
+          </LinearGradient>
         
         </View>
 
 
 
         <View style={{paddingLeft:25,paddingRight:25}}>
-          <View style={{backgroundColor:'#23a9f9',borderRadius:20}}>
+          <LinearGradient 
+            start={{x: 0.0, y: 0.25}} 
+            end={{x: 0.5, y: 1.2}}
+            locations={[0,0.7,1.0]}
+            colors={['#66c9ff', '#00a6ff', '#0095e6']} 
+            style={{backgroundColor:'#23a9f9',borderRadius:20,elevation: 7}}>
             <View style={{padding:20,paddingBottom:0}}> 
               <Text style={{color:'white',fontSize:15,fontFamily:'Nunito_700Bold',paddingBottom:10}}>MY TODAY'S MISSION ?</Text>
               <View style={{backgroundColor:'white',height:2}}></View>
@@ -222,20 +247,26 @@ export default function HomeScreen() {
                     
                 />
               </View>
-              <TouchableOpacity style={{paddingTop:20,flex:1,alignItems:'flex-end'}}>
+              <View style={{paddingTop:20,flex:1,alignItems:'flex-end'}}>
                 
                   <View style={{
                     justifyContent:'center',alignItems:'center',
-                    backgroundColor:'#0f92f0',height:40,borderRadius:15,
-                    width:80,borderColor:'#0c75c0',borderWidth:1
+                    backgroundColor:'#00a6ff',height:45,borderRadius:30,
+                    width:45,borderColor:'#0c75c0',borderWidth:1, elevation: 3
                     
                   }}>
-                    <Text style={{color:'white',fontFamily:'Nunito_700Bold',fontSize:12}}>SUBMIT</Text>
+                    <TouchableOpacity>
+                    <Text style={{color:'white',fontFamily:'Nunito_700Bold',fontSize:12}}>
+                      
+                    <Icon style={{ elevation: 10}} type={Icons.Feather} name='check'  color={'white'} size={25}/>
+                    
+                    </Text>
+                    </TouchableOpacity>
                   </View>
-              </TouchableOpacity>
+              </View>
              
             </View>
-          </View>
+          </LinearGradient>
         
         </View>
 
@@ -244,7 +275,7 @@ export default function HomeScreen() {
         
         </View>
     
-        </View>
+        </LinearGradient>
         </ScrollView>
     </SafeAreaView>
    

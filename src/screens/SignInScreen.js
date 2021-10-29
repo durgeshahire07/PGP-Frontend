@@ -205,7 +205,7 @@ export default SignInScreen = ({navigation}) => {
                         }}
                         >
                         <TextInput style={{flex:1}}
-                         placeholder="********"
+                         placeholder="••••••••"
                          secureTextEntry={secureEntry.secureTextEntry ? true : false}
                          autoCapitalize="none"
                          onChangeText={(pass) => handlePasswordChange(pass)}
