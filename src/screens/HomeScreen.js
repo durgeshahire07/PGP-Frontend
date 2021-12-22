@@ -23,6 +23,7 @@ import axios from 'axios'
 // import Survey from '../components/Survey'
 import config from '../api/config'
 import {LinearGradient} from 'expo-linear-gradient';
+import  AsyncStorage  from '@react-native-async-storage/async-storage';
 
 const OVERFLOW_HEIGHT = 70;
 const SPACING = 10;
@@ -51,8 +52,8 @@ const VISIBLE_ITEMS = 3;
 
 export default function HomeScreen() {
 
-  const [user] = useContext(UserContext);
-  console.log(user.firstname)
+  const [user,setUser] = useContext(UserContext);
+
 	
     var today = new Date();
     var time = today.getHours();
@@ -64,6 +65,25 @@ export default function HomeScreen() {
        console.log(state)
        
     }
+
+    async function getUserDetails () {
+      let getVal = await AsyncStorage.getItem('@app_user');
+      const userDetails = JSON.parse(getVal);
+      console.log(userDetails)
+      await setUser({
+          email: userDetails.email,
+          firstname: userDetails.firstname,
+          isLoggedIn: userDetails.isLoggedIn,
+          lastname: userDetails.lastname,
+          token: userDetails.token,
+          uid: userDetails.uid,
+      })
+  }
+
+    useEffect(()=>{
+      getUserDetails();
+  },[]);
+
     return (
       
     <SafeAreaView>

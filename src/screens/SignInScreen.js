@@ -13,12 +13,14 @@ import AppStackScreen from '../stack/AppStackScreen'
 import config from '../api/config'
 import axios from 'axios'
 import { State } from 'react-native-gesture-handler'
+import  AsyncStorage  from '@react-native-async-storage/async-storage';
+
 
 export default SignInScreen = ({navigation}) => {
 
     const {HOST,LOGIN} = config;
    
-    const [_,setUser] = useContext(UserContext);
+    const [user,setUser] = useContext(UserContext);
     // console.log(setUser);
     const [data, setData] = useState({
         email: '',
@@ -71,6 +73,7 @@ export default SignInScreen = ({navigation}) => {
             secureTextEntry: !secureEntry.secureTextEntry
         });
     }
+    
     const SignIn = async() => {
         
         if(data.email == "" || data.password == ""){
@@ -85,8 +88,6 @@ export default SignInScreen = ({navigation}) => {
         }
         else {
             setLoading(true);
-            console.log("data: ",data)
-            setLoading(true)
             try{
                 var config = {
                             method: 'post',
@@ -99,17 +100,26 @@ export default SignInScreen = ({navigation}) => {
                             }
                         };
                         const response = await axios(config)
-                        console.log(response)
+                        // console.log(response)
                         if(response.data.success){
-                            setUser({
+                            await setUser({
+                                isLoggedIn: true,
+                                uid: response.data.data._id,
                                 firstname: response.data.data.firstName,
                                 lastname: response.data.data.lastName,
                                 email: response.data.data.userEmailId,
-                                uid: response.data.data._id,
-                                isLoggedIn: true,
+                                token: response.data.token
                             })
-                            
-                            
+                            const USER = {
+                                isLoggedIn: true,
+                                uid: response.data.data._id,
+                                firstname: response.data.data.firstName,
+                                lastname: response.data.data.lastName,
+                                email: response.data.data.userEmailId,
+                                token: response.data.token
+                            }
+                            await AsyncStorage.setItem('@app_user', JSON.stringify(USER))
+                           
                         }
                         else{
                             alert(

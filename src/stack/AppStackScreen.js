@@ -1,14 +1,46 @@
-import React,{useContext} from "react";
+import React,{useContext,useEffect} from "react";
 import {createStackNavigator} from "@react-navigation/stack"
 import { UserContext } from "../context/UserContext";
 import MainStackScreen from "./MainStackScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
+import  AsyncStorage  from '@react-native-async-storage/async-storage';
 
 export default AppStackScreen = () => {
+    const [user,setUser] = useContext(UserContext);
+
+
+
     const AppStack = createStackNavigator();
-    const [user] = useContext(UserContext);
+    
+    async function getUserDetails () {
+        let getVal = await AsyncStorage.getItem('@app_user');
+        const userDetails = JSON.parse(getVal);
+        console.log(userDetails)
+        setUser({
+            email: userDetails?.email,
+            firstname: userDetails?.firstname,
+            isLoggedIn: userDetails?.isLoggedIn,
+            lastname: userDetails?.lastname,
+            token: userDetails?.token,
+            uid: userDetails?.uid,
+        })
+    }
+    // async function removeItemValue(key) {
+    //     try {
+    //         await AsyncStorage.removeItem('@app_user');
+    //         return true;
+    //     }
+    //     catch(exception) {
+    //         return false;
+    //     }
+    // }
+    useEffect(()=>{
+        getUserDetails();
+    },[]);
+
+
     return(
       
         // <AppStack.Navigator screenOptions={{
