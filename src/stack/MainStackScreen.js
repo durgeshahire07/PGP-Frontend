@@ -74,7 +74,7 @@ export default MainStackScreen = () => {
               
               height: 60,
               position: 'absolute',
-              bottom: 16,
+              bottom: 8,
               right: 16,
               left: 16,
               borderRadius: 16,
