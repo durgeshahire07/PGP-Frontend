@@ -25,7 +25,7 @@ export default ProfileScreen = () => {
                         }}>Profile</Text>
 
             </View> */}
-           <View style={{alignItems:'center',marginTop:50,height:90,justifyContent:'center'}}>
+           {/* <View style={{alignItems:'center',marginTop:50,height:90,justifyContent:'center'}}>
                 <View style={{backgroundColor:'black',height:'100%',width:'25%',borderRadius:50,justifyContent:'center',alignItems:'center'}}>
                     <Text style={{fontSize:30,color:'white',}}>D A</Text>
                 </View>
@@ -60,8 +60,8 @@ export default ProfileScreen = () => {
                        
                     </View>
                 
-                </View>
-        </View>
+                </View> */}
+        </View> 
     )
 }
 
