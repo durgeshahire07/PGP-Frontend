@@ -15,7 +15,8 @@ import {
   KeyboardAvoidingView,
   Modal,
   Pressable,
-  ToastAndroid
+  ToastAndroid,
+  ActivityIndicator
 } from 'react-native';
 import Icon, { Icons } from '../components/Icon';
 const { width,height } = Dimensions.get('screen');
@@ -58,7 +59,8 @@ export default function HomeScreen() {
 
   const [user,setUser] = useContext(UserContext);
   const [loading,setLoading] = useState(true);
-  const {HOST,LOGIN,GET_SURVEY} = config;
+  const [buttonLoading,setButtonLoading] = useState(false);
+  const {HOST,GET_SURVEY,SAVE_RESPONSE} = config;
 	var submit = true;
     var today = new Date();
     var time = today.getHours();
@@ -85,8 +87,8 @@ export default function HomeScreen() {
     async function getSurvey (token) {
       var config = {
         method: 'post',
-        // url: `${HOST}${GET_SURVEY}`,
-        url: `http://192.168.43.19:3000/api/v1/survey/getSurvey`,
+        url: `${HOST}${GET_SURVEY}`,
+        // url: `http://192.168.43.19:3000/api/v1/survey/getSurvey`,
         headers: {},
         data: {
           surveyType: "daily",
@@ -99,6 +101,7 @@ export default function HomeScreen() {
 
             if (response.data.success) {
               setLoading(false);
+              setButtonLoading(false);
                 setData({
                     data: response.data.data
                 })
@@ -175,7 +178,7 @@ export default function HomeScreen() {
 
 
   async function submitHandler() {
-    setLoading(true);
+    
     console.log(submit)
     data.data.map((val, key) => {
         changeRes(val, key)
@@ -184,7 +187,8 @@ export default function HomeScreen() {
 
 
     if (submit) {
-      setLoading(true);
+        setButtonLoading(true);
+    //   setLoading(true);
         // setState({
         //     ...state,
         //     isLoading: true
@@ -194,16 +198,20 @@ export default function HomeScreen() {
         try {
             var config = {
                 method: 'post',
-                url: `http://192.168.43.19:3000/api/v1/survey/saveResponse`,
+                // url: `http://192.168.43.19:3000/api/v1/survey/saveResponse`,
+                url: `${HOST}${SAVE_RESPONSE}`,
                 headers: {},
                 data: res.ans
             };
             const response = await axios(config)
             console.log(response)
             if (response.data.success) {
-              setLoading(false);
+                
                 ToastAndroid.show("Response saved successfully!👍",
                     ToastAndroid.SHORT)
+                setLoading(true);
+                getUserDetails(); 
+                
             }
             else {
 
@@ -324,22 +332,29 @@ const handleSliderChange = (val, id, subQue) => {
 const submitButton = () => {
   return (
       <View style={{ paddingBottom: 10, paddingHorizontal: 50 }}>
-          <Pressable onPress={submitHandler}
+          <Pressable disabled={buttonLoading} onPress={submitHandler}
               android_ripple={{ color: '#fff' }}
               style={{
                   borderRadius: 20,
-                  backgroundColor: '#006699',
+                  backgroundColor: '#028de1',
                   paddingHorizontal: 70,
                   paddingVertical: 15,
-                  backgroundColor: '#4700b3'
+                 
               }} >
               <View style={{ alignItems: 'center' }}>
-                  <Text style={{
+                  {
+                      buttonLoading ? (
+                        <ActivityIndicator size="small" color="#fff" />
+                      ) : (
+                        <Text style={{
                      
-                      fontSize: 17,
-                      color: '#fff',
-
-                  }}>Submit</Text>
+                            fontSize: 17,
+                            color: '#fff',
+      
+                        }}>Submit</Text>
+                      )
+                  }
+                  
               </View>
           </Pressable>
       </View>
@@ -550,7 +565,7 @@ const submitButton = () => {
 
     return (
       
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor:'#fff'}}>
        {/* <View style={{
                             // flexDirection: 'row',
                             backgroundColor: "#fff",
@@ -567,15 +582,15 @@ const submitButton = () => {
 
             </View>  */}
            
-    <ScrollView >
+    <ScrollView style={{backgroundColor:'#fff'}}>
       {/* <Modal/> */}
-      <LinearGradient style={{}} 
+      <LinearGradient style={{backgroundColor:'#fff'}} 
       // start={{x: 0.0, y: 0.25}} 
       // end={{x: 1.5, y: 1.2}}
       // locations={[0.1,1.0,1.0]}
       colors={['#ECE9E6', '#ECE9E6', '#ECE9E6']} >
-        <View style={{flex:1,alignItems:'center',paddingTop:5,backgroundColor:"#fff"}}>
-          <Text syle={{}}>---</Text>
+        <View style={{flex:1,alignItems:'center',paddingTop:5,paddingBottom:10,backgroundColor:"#fff"}}>
+          <Text style={{fontSize:11}}>Personal Growth Pyramid</Text>
         </View>
         <View style={{paddingLeft:22,paddingTop:5,paddingBottom:10,backgroundColor:"#fff"}}>
         <Text style={{fontSize:14,fontFamily:'Comfortaa_400Regular',color:'black'}}>Hi {user.firstname} {user.lastname},</Text>
@@ -595,33 +610,51 @@ const submitButton = () => {
           
           {/* <Text style={{fontSize:25,fontFamily:'Comfortaa_400Regular'}}>Durgesh </Text> */}
         </View>
-        <View style={{paddingLeft:25,paddingTop:10,paddingBottom:10,flexDirection:'row',backgroundColor:"#fff"}}>
-          <Text style={{paddingRight:5,fontFamily:'Roboto',fontSize:12,fontWeight:'bold'}}>WHAT'S NEW TODAY</Text>
-          <View style={{paddingLeft:5,backgroundColor:'#FC5656',paddingRight:5,borderRadius:10,elevation:5}}>
-            <Text style={{color:'white'}}>2</Text>
-          </View>
-        </View>
+        
       {/* <View style={{height:height*0.33}}> */}
       {/* <Survey items={DATA}/> */}
       {/* <Survey /> */}
       
                             
         {/* </View> */}
-        <View style={{paddingBottom:70,backgroundColor:"#fff"}}>
-        <FlatList
-                    keyExtractor={(item) => item._id}
-                    data={data.data}
-                    refreshing={loading}
-                    onRefresh={getSurvey} 
-                    ListFooterComponent={submitButton}
-                    renderItem={({ item }) => (
-                        <View style={{ paddingVertical: 10 }} >
-                            {display(item, item._id)}
-                        </View>
 
-                    )}
-                />
-        </View>
+
+        {
+            loading ? (
+                <View style={{backgroundColor:"#fff",flex:1,paddingTop:250,paddingBottom:390}}>
+                     <ActivityIndicator size="large" color="#028de1" />
+                </View>
+            ) : 
+            
+            (
+                <View style={{paddingBottom:70,backgroundColor:"#fff"}}>
+                <View style={{paddingLeft:25,paddingTop:10,paddingBottom:10,flexDirection:'row',backgroundColor:"#fff"}}>
+                  <Text style={{paddingRight:5,fontFamily:'Roboto',fontSize:12,fontWeight:'bold'}}>WHAT'S NEW TODAY</Text>
+                  <View style={{paddingLeft:5,backgroundColor:'#FC5656',paddingRight:5,borderRadius:10,elevation:5}}>
+                    <Text style={{color:'white'}}>7</Text>
+                  </View>
+                </View>
+              
+                            <FlatList
+                            keyExtractor={(item) => item._id}
+                            data={data.data}
+                            // refreshing={loading}
+                            // onRefresh={getSurvey} 
+                            ListFooterComponent={submitButton}
+                            renderItem={({ item }) => (
+                                <View style={{ paddingVertical: 10 }} >
+                                    {display(item, item._id)}
+                                </View>
+        
+                            )}
+                        />
+                       
+               
+                </View>
+            )
+            
+        }
+       
        
             
         

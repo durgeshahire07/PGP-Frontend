@@ -91,8 +91,8 @@ export default SignInScreen = ({navigation}) => {
             try{
                 var config = {
                             method: 'post',
-                            // url: `${HOST}${LOGIN}`,
-                            url: `http://192.168.43.19:3000/api/v1/auth/login`,
+                            url: `${HOST}${LOGIN}`,
+                            // url: `http://192.168.43.19:3000/api/v1/auth/login`,
                             headers: {},
                             data: {
                                 "userEmailId": data.email,
